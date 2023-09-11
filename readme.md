@@ -1,5 +1,10 @@
+## QQHistory Export
+QQ聊天记录工具的后端模块之一,用于本地消息数据库的导出,目前计划支持Android和Windows端的数据解析,是[Hakuuyosei/QQHistoryExport](https://github.com/Hakuuyosei/QQHistoryExport)项目的不兼容重构
+
+目前只编写并成功运行了一些解析相关的测试函数,后续代码缓慢编写中...
+
 ## 目前已知信息
-### 手机端
+### Android端
 #### 位置
 消息存储在`/data/data/com.tencent.mobileqq/databases/`下的`{QQ号}.db`和`slowtable_{QQ号}.db`,其中slowtable存储时间较为久远的消息
 
@@ -36,7 +41,20 @@ long uniseq = ((short)(int)msgseq) << 32
 ```
 其他字段比较显然不包含有效信息,就不再逐一说明
 
-### PC端
+#### 消息解析
+
+已知消息的序列化方式包括<br/>
+`json`(常见的数据传输格式)<br/>
+`Java Serialization`(Java内置的序列化方式)<br/>
+`protobuf`(Google提出的一种序列化方式)<br/>
+`XmlBuff`(疑似腾讯自己实现的序列化方式)<br/>
+
+其中json格式很容易解析;java序列化需要通过对QQ代码中的相关数据类进行模拟,然后通过Java内置类`ObjectInputStream`进行解析;protobuf需要通过参考QQ代码中对应数据类的`__fieldMap__`,然后还原.proto文件并通过protobuf提供的代码生成器生成解析代码,或利用__fieldMap__中提供的信息和黑盒解析方式提取出需要的数据;XmlBuff格式目前解析方式不明
+
+具体各消息类型对应的序列化方式见[QQ消息格式.xlsx
+](https://github.com/Hakuuyosei/QQHistoryExport/blob/master/docs/QQ%E6%B6%88%E6%81%AF%E6%A0%BC%E5%BC%8F.xlsx)
+
+### Windows端
 #### 位置
 消息存储在`个人文件夹\<QQ号>\Msg3.0.db`下的`Msg3.0.db`
 
@@ -61,3 +79,7 @@ long uniseq = ((short)(int)msgseq) << 32
 `Info`字段暂未解析,内容未知
 
 `$Seq$`表中的`Seq`字段是消息的**序列号**
+
+#### 消息解析
+
+消息的序列化方式为**TLV**(Tag-Length-Value)格式,字符串类型数据编码为**UTF-16LE**,数值类型都为**无符号类型**
