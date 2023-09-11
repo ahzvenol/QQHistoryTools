@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xco.visualize.mapper.MsgSelectMapper">
+    <sql id="sme">
+        <bind name="startIndexReduction" value="startIndex - 1"/>
+        select m1.id,
+        m1.source,
+        s.qq_code qqCode,
+        m1.time_stamp msgSendTime,
+        m1.sender_name senderName,
+        m1.msg msgContent,
+        m1.quote,
+        m2.time_stamp quoteMsgSendTime,
+        m2.sender_name quoteName,
+        m2.msg quoteMsg,
+        r.recallTime,
+        r.authorName,
+        r.authorQQCode,
+        r.operatorName,
+        r.operatorQQCode
+        from (msg m1,member s)
+        left join
+        msg m2
+        on
+        m1.quote = m2.source
+        left join (select r.recall_source,
+        r.time_stamp recallTime,
+        r.author_name authorName,
+        s1.qq_code authorQQCode,
+        r.operator_name operatorName,
+        s2.qq_code operatorQQCode
+        from recall r
+        left join member s1 on r.author_id = s1.id
+        left join member s2 on r.operator_id = s2.id) r on r.recall_source = m1.source
+        where m1.sender_id = s.id
+        order by m1.id asc
+        <if test="startIndexReduction != null and startIndex gte 0 and length != null">
+            limit #{startIndexReduction},#{length}
+        </if>
+    </sql>
+    <select id="selectMsgEx" parameterType="map" resultType="map">
+        <include refid="sme"/>
+    </select>
+
+    <select id="selectCompleteMsg" parameterType="map" resultType="xco.visualize.entity.CompleteMsgVO">
+        <include refid="sme"/>
+    </select>
+</mapper>
