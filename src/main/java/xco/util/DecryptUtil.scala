@@ -27,14 +27,13 @@ class DecryptUtil(config: ExportConfig) {
       }
   }
 
-  def decrypt(data: Array[Byte] | String): String = {
+  def decrypt(data: Array[Byte] | String): Array[Byte] = {
     val key = config.key
     val bytes = data match
       case arr: Array[Byte] => arr
       case s: String => s.getBytes
     //    Range(0, bytes.length).foldLeft("")((m, i) => m + (bytes(i) ^ key(i % key.length)).toChar)
-    val resultByteSeq = bytes.indices.map(i => (bytes(i) ^ key(i % key.length)).toByte)
-    String(resultByteSeq.toArray,"UTF-8")
+    bytes.indices.map(i => (bytes(i) ^ key(i % key.length)).toByte).toArray
   }
 
   def base64Decode(data: String): String = data.getBytes("UTF-8")

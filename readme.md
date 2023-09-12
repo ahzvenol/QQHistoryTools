@@ -49,7 +49,13 @@ long uniseq = ((short)(int)msgseq) << 32
 `protobuf`(Google提出的一种序列化方式)<br/>
 `XmlBuff`(疑似腾讯自己实现的序列化方式)<br/>
 
-其中json格式很容易解析;java序列化需要通过对QQ代码中的相关数据类进行模拟,然后通过Java内置类`ObjectInputStream`进行解析;protobuf需要通过参考QQ代码中对应数据类的`__fieldMap__`,然后还原.proto文件并通过protobuf提供的代码生成器生成解析代码,或利用__fieldMap__中提供的信息和黑盒解析方式提取出需要的数据;XmlBuff格式目前解析方式不明
+其中json格式使用任意json解析库即可解析<br/>
+java序列化需要通过对QQ代码中的相关数据类进行模拟,然后通过Java内置类`ObjectInputStream`进行解析<br/>
+protobuf需要通过参考QQ代码中对应数据类的`__fieldMap__`字段，然后通过官方解析和黑盒解析两种方式之一解析数据<br/>
+官方解析：手动还原.proto文件并通过protobuf提供的代码生成器生成解析代码<br/>
+黑盒解析：利用__fieldMap__中提供的信息和黑盒解析方式(protobuf代码库提供的`UnknownFieldSet.parseFrom`即可)提取出需要的数据<br/>
+
+XmlBuff格式目前解析方式不明
 
 具体各消息类型对应的序列化方式见[QQ消息格式.xlsx
 ](https://github.com/Hakuuyosei/QQHistoryExport/blob/master/docs/QQ%E6%B6%88%E6%81%AF%E6%A0%BC%E5%BC%8F.xlsx)

@@ -1,4 +1,4 @@
-import com.google.protobuf.{Descriptors, DynamicMessage, UnknownFieldSet}
+import com.google.protobuf.{ByteString, Descriptors, DynamicMessage, UnknownFieldSet}
 import org.junit.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.runner.RunWith
@@ -46,6 +46,9 @@ class MapperTest() {
       }.toList
     }
 
+  extension (array: Array[Byte])
+    def asUTF8String: String = String(array, "UTF-8")
+
   @Test
   def traversalDatabase(): Unit = {
     val tableNameSet = connection.getMetaData.getTables(null, null, "%", null)
@@ -71,7 +74,7 @@ class MapperTest() {
   @Test
   def androidDataDecrypt(): Unit = {
     val sample = List(-41, -109, -108, -43, -98, -92, 112, -44, -126, -80, -43, -75, -102, -41, -78, -100, -40, -87, -103)
-    val result = decryptUtil.decrypt(sample.map(_.toByte).toArray)
+    val result = decryptUtil.decrypt(sample.map(_.toByte).toArray).asUTF8String
     println(result.mkString("Array(", ", ", ")"))
     assert(result == "确实@一只爬虫")
   }
@@ -81,14 +84,13 @@ class MapperTest() {
     val targetNumber = "904516937"
     val targetType: "troop" | "friend" = "troop"
     val resultSet = connection.createStatement()
-      .executeQuery(s"select * from mr_${targetType}_${MD5Util.md5Encrypt32Upper(targetNumber)}_New where msgtype = -1035")
-      .getResultList(row => (row.getBytes("msgData"), row.getString("shmsgseq")))
+      .executeQuery(s"select * from mr_${targetType}_${MD5Util.md5Encrypt32Upper(targetNumber)}_New where msgtype = -2000")
+      .getResultList(row => (decryptUtil.decrypt(row.getBytes("msgData")), row.getString("shmsgseq")))
     for (rowMessage, source) <- resultSet.take(1) do
+      println(rowMessage.asUTF8String)
       Try(UnknownFieldSet.parseFrom(rowMessage)) match
         case Success(value) => println(value)
-        case Failure(_) =>
-          //  Files.write(Paths.get(s"sample-$source.hex"), rowMessage)
-          println(String(rowMessage,"utf-8"))
+        case Failure(err) => println(err)
   }
 
 
@@ -103,8 +105,8 @@ class MapperTest() {
 
     for (rowMessage, source) <- resultSet do
       println((rowMessage.mkString("Array(", ", ", ")"), source))
-      println(rowMessage |> DatatypeConverter.printHexBinary)
-      println(rowMessage |> decryptUtil.decrypt)
+      println(DatatypeConverter.printHexBinary(rowMessage))
+      println(decryptUtil.decrypt(rowMessage).asUTF8String)
       println("---------------")
   }
 
