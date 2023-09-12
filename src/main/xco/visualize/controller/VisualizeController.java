@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/b3f767f7-91ce-4efb-b70e-559fded918c3")
+@RequestMapping("/ab239136-7e95-4ba3-ab99-b20bc06115c5")
 public class VisualizeController {
     @Autowired
     private MsgService msgService;
