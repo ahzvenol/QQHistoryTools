@@ -86,8 +86,8 @@ class MapperTest() {
     val resultSet = connection.createStatement()
       .executeQuery(s"select * from mr_${targetType}_${MD5Util.md5Encrypt32Upper(targetNumber)}_New where msgtype = -2000")
       .getResultList(row => (decryptUtil.decrypt(row.getBytes("msgData")), row.getString("shmsgseq")))
-    for (rowMessage, source) <- resultSet.take(1) do
-      println(rowMessage.asUTF8String)
+    for (rowMessage, source) <- resultSet do
+      //      println(rowMessage.asUTF8String)
       Try(UnknownFieldSet.parseFrom(rowMessage)) match
         case Success(value) => println(value)
         case Failure(err) => println(err)
