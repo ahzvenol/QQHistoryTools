@@ -9,7 +9,7 @@ import java.sql.{CallableStatement, PreparedStatement, ResultSet}
 
 @Component
 @MappedTypes(Array(classOf[Array[Byte]]))
-@MappedJdbcTypes(Array(JdbcType.BLOB,JdbcType.CLOB))
+@MappedJdbcTypes(Array(JdbcType.BLOB,JdbcType.VARCHAR))
 class AndroidDecryptHandler(decryptUtil: DecryptUtil) extends BaseTypeHandler[Array[Byte]] {
   override def setNonNullParameter(ps: PreparedStatement, i: Int, t: Array[Byte], jdbcType: JdbcType): Unit = {
     LoggerFactory.getLogger(classOf[AndroidDecryptHandler]).warn("只实现了解密功能")

@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
+import java.util.Map;
 
+import com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler;
 import lombok.Data;
 import xco.handler.AndroidDecryptHandler;
 import xco.handler.IntUnixTimestampHandler;
@@ -17,7 +19,7 @@ import xco.handler.IntUnixTimestampHandler;
 public class AndroidDatabaseDO {
     @TableId(value = "_id", type = IdType.AUTO)
     private Integer id;
-    @TableField(value = "extStr")
+    @TableField(value = "extStr", typeHandler = AndroidDecryptHandler.class)
     private byte[] extra;
     //@TableField(value = "frienduin")
     //private String receiverId;
@@ -27,7 +29,7 @@ public class AndroidDatabaseDO {
     private byte[] msgData;
     @TableField(value = "msgtype")
     private Integer msgType;
-    @TableField(value = "senderuin")
+    @TableField(value = "senderuin", typeHandler = AndroidDecryptHandler.class)
     private byte[] senderId;
     @TableField(value = "shmsgseq")
     private Integer source;
