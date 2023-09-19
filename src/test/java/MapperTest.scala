@@ -11,6 +11,7 @@ import xco.handler.AndroidTableNameHandler
 import xco.handler.AndroidTableNameHandler.AndroidMessageTableQueryInfo
 import xco.handler.WindowsTableNameHandler.WindowsMessageTableQueryInfo
 import xco.mapper.{AndroidMessageMapperWrapper, WindowsMessageMapperWrapper}
+import xco.message.AbstractWindowsMessage
 import xco.util.FPUtil.|>
 
 import scala.util.{Try, Using}
@@ -48,11 +49,27 @@ class MapperTest() {
     val targetType: "group" | "buddy" = "group"
     val targetNumber = "904516937"
     val result = windowsMessageMapper.usingMapper(WindowsMessageTableQueryInfo(targetType, targetNumber))(_.selectList(null))
+    import xco.util.DataInputStreamDecorator.*
     for i <- result.toList do
       println(i.getId)
       println(i.getSenderId)
       println(i.getTime)
-      println(i.getMsgContent)
+      println(DatatypeConverter.printHexBinary(i.getMsgContent))
+      val absMessage = AbstractWindowsMessage(i.getMsgContent)
+      println(absMessage.fontName)
+      val buf = DataInputStream(ByteArrayInputStream(i.getMsgContent))
+      buf.skip(8)
+      val time = buf.readLittleEndianUnsignedInt()
+      val rand = buf.readLittleEndianUnsignedInt()
+      val color = buf.readLittleEndianUnsignedInt()
+      val fontSize = buf.readUnsignedByte()
+      val fontSylte = buf.readUnsignedByte()
+      val charset = buf.readUnsignedByte()
+      val fontFamily = buf.readUnsignedByte()
+      val fontName = buf.readNBytes(buf.readLittleEndianUnsignedShort())
+      buf.skip(2)
+      println(time)
+      println(String(fontName, "UTF-16LE"))
       println("------------")
   }
 }

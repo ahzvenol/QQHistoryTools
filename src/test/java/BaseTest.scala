@@ -116,10 +116,11 @@ class BaseTest {
   @Test
   def windowsDataDecode(): Unit = {
     val targetNumber = "904516937"
+    val targetType: "group" | "buddy" = "group"
     val bytesArray = connection
       .createStatement()
       //      .executeQuery(s"select MsgContent from group_${targetNumber} where Rand = 2743318696")
-      .executeQuery(s"select MsgContent from group_$targetNumber")
+      .executeQuery(s"select MsgContent from ${targetType}_${targetNumber}")
       .getResultList(_.getBytes(1))
 
     extension (is: DataInputStream)
@@ -144,6 +145,7 @@ class BaseTest {
 
     for bytes <- bytesArray do
       val buf = DataInputStream(ByteArrayInputStream(bytes))
+      println(DatatypeConverter.printHexBinary(bytes))
       buf.skip(8)
       val time = buf.readLittleEndianUnsignedInt()
       val rand = buf.readLittleEndianUnsignedInt()
@@ -156,7 +158,6 @@ class BaseTest {
       buf.skip(2)
       println(time)
       println(String(fontName, "UTF-16LE"))
-
       while buf.available() != 0 do
         println(readTLVGroup(buf))
   }
