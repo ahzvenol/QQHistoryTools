@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 import xco.handler.AndroidDecryptHandler;
+import xco.handler.ByteBlobHandler;
 import xco.handler.IntUnixTimestampHandler;
 
 import java.util.Date;
@@ -19,6 +20,6 @@ public class WindowsMessageTableDO {
     private Date time;
     @TableField(value = "SenderUin")
     private Integer senderId;
-    @TableField(value = "MsgContent")
+    @TableField(value = "MsgContent", typeHandler = ByteBlobHandler.class)
     private byte[] msgContent;
 }
