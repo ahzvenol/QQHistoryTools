@@ -13,7 +13,7 @@ import scala.collection.mutable.ListBuffer
 import scala.util.Using
 
 @Component
-class DecryptUtil(config: ExportConfig) {
+class AndroidDecryptUtil(config: ExportConfig) {
 
   val UnserializedDataType: Array[Int] = Array(-1000, -1051, -1012, -2042, -2015, -1034, -2005, -3008, -2016, -4008, -1013, -2009, -1001, -5018, -5012)
   val ProtoDataType: Array[Int] = Array(-2000, -1035, -2002, -2022, -5020, -5023, -8018, -5040)

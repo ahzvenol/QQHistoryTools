@@ -6,17 +6,15 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
-import java.util.Map;
 
-import com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler;
 import lombok.Data;
 import xco.handler.AndroidDecryptHandler;
 import xco.handler.IntUnixTimestampHandler;
 
 @Data
-@TableName("mr_%s_%s_New")
+@TableName("mr_%s_%s_New[Android]")
 //@TableName("mr_troop_87A21D72BABAA8E3268998EF084C362E_New")
-public class AndroidDatabaseDO {
+public class AndroidMessageTableDO {
     @TableId(value = "_id", type = IdType.AUTO)
     private Integer id;
     @TableField(value = "extStr", typeHandler = AndroidDecryptHandler.class)

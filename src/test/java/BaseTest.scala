@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner
 import xco.Application
 import xco.config.ExportConfig
 import xco.util.FPUtil.|>
-import xco.util.{DecryptUtil, MD5Util}
+import xco.util.{AndroidDecryptUtil, MD5Util}
 
 import java.io.{ByteArrayInputStream, DataInputStream}
 import java.nio.charset.{Charset, StandardCharsets}
@@ -27,7 +27,7 @@ import scala.util.{Failure, Success, Try}
 @SpringBootTest(classes = Array(classOf[Application]))
 class BaseTest {
   @Autowired
-  val decryptUtil: DecryptUtil = null
+  val decryptUtil: AndroidDecryptUtil = null
   @Autowired
   val sqlSessionTemplate: SqlSessionTemplate = null
 
