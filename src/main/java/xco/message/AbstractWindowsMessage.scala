@@ -1,9 +1,16 @@
 package xco.message
 
+import xco.entity.WindowsMessageTableDO
+
 import java.io.{ByteArrayInputStream, DataInputStream}
 import xco.util.DataInputStreamDecorator.*
 
-class AbstractWindowsMessage(is: DataInputStream) {
+import java.util.Date
+
+class AbstractWindowsMessage(entity: WindowsMessageTableDO) {
+  val senderId: Int = entity.getSenderId
+  val timeStamp: Date = entity.getTime
+  private val is = DataInputStream(ByteArrayInputStream(entity.getMsgContent))
   is.skip(8)
   val time: Long = is.readLittleEndianUnsignedInt()
   val rand: Long = is.readLittleEndianUnsignedInt()
@@ -14,8 +21,4 @@ class AbstractWindowsMessage(is: DataInputStream) {
   val fontFamily: Int = is.readUnsignedByte()
   val fontName: String = String(is.readNBytes(is.readLittleEndianUnsignedShort()), "UTF-16LE")
   is.skip(2)
-}
-
-object AbstractWindowsMessage {
-  def apply(bytes: Array[Byte]) = new AbstractWindowsMessage(DataInputStream(ByteArrayInputStream(bytes)))
 }

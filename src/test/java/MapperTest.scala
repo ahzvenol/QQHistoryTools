@@ -55,7 +55,7 @@ class MapperTest() {
       println(i.getSenderId)
       println(i.getTime)
       //      println(DatatypeConverter.printHexBinary(i.getMsgContent))
-      val absMessage = AbstractWindowsMessage(i.getMsgContent)
+      val absMessage = AbstractWindowsMessage(i)
       println(absMessage.fontName)
       println("------------")
   }
