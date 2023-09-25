@@ -50,7 +50,7 @@ class MapperTest() {
     val targetType: "group" | "buddy" = "group"
     val targetNumber = "904516937"
     val result = windowsMessageMapper.usingMapper(WindowsMessageTableQueryInfo(targetType, targetNumber))(_.selectList(null))
-    import xco.util.DataInputStreamDecorator.*
+    import xco.util.DataInputStreamExtension.*
     for i <- result.toList do {
       //      println(i.getId)
       //      println(i.getSenderId)
@@ -59,22 +59,6 @@ class MapperTest() {
       val absMessage = AbstractWindowsMessage(i)
       //      println(absMessage.fontName)
 
-      case class TLVGroup(tag: Int, length: Int, value: Array[Byte])
-
-      def readTLVGroup(is: DataInputStream): TLVGroup = {
-        val tag = is.readUnsignedByte()
-        val length = is.readLittleEndianUnsignedShort()
-        val value = is.readNBytes(length)
-        TLVGroup(tag, length, value)
-      }
-
-      val listBuffer = ListBuffer[TLVGroup]()
-      val is = DataInputStream(ByteArrayInputStream(absMessage.tail))
-      while is.available() != 0 do listBuffer.addOne(readTLVGroup(is))
-      val texts = List.from(listBuffer).filter(_.tag == 1).map(_.value)
-        .map(e => readTLVGroup(DataInputStream(ByteArrayInputStream(e)))).map(_.value)
-        .map(e => String(e, "UTF-16LE"))
-      println(texts)
       println("------------")
     }
   }

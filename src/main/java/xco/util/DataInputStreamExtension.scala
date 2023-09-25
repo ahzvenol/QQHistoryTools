@@ -2,7 +2,7 @@ package xco.util
 
 import java.io.DataInputStream
 
-object DataInputStreamDecorator {
+object DataInputStreamExtension {
   extension (is: DataInputStream)
     def readUnsignedInt(): Long = is.readInt() & 0x0FFFFFFFFL
 

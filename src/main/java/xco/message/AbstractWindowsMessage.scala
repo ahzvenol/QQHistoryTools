@@ -3,7 +3,7 @@ package xco.message
 import xco.entity.WindowsMessageTableDO
 
 import java.io.{ByteArrayInputStream, DataInputStream}
-import xco.util.DataInputStreamDecorator.*
+import xco.util.DataInputStreamExtension.*
 
 import java.util.Date
 

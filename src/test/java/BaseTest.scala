@@ -18,7 +18,9 @@ import java.nio.file.{Files, Paths}
 import java.nio.{Buffer, ByteBuffer, CharBuffer}
 import java.sql.{Connection, ResultSet}
 import java.util
+import java.util.Date
 import javax.xml.bind.DatatypeConverter
+import scala.collection.mutable.ListBuffer
 import scala.util.{Failure, Success, Try}
 
 
@@ -138,14 +140,14 @@ class BaseTest {
 
     def readTLVGroup(is: DataInputStream): TLVGroup = {
       val tag = is.readUnsignedByte()
-      val length = is.readUnsignedShort()
+      val length = is.readLittleEndianUnsignedShort()
       val value = is.readNBytes(length)
       TLVGroup(tag, length, value)
     }
 
     for bytes <- bytesArray do
       val buf = DataInputStream(ByteArrayInputStream(bytes))
-      println(DatatypeConverter.printHexBinary(bytes))
+      //      println(DatatypeConverter.printHexBinary(bytes))
       buf.skip(8)
       val time = buf.readLittleEndianUnsignedInt()
       val rand = buf.readLittleEndianUnsignedInt()
@@ -156,9 +158,15 @@ class BaseTest {
       val fontFamily = buf.readUnsignedByte()
       val fontName = buf.readNBytes(buf.readLittleEndianUnsignedShort())
       buf.skip(2)
-      println(time)
+      println(Date(time * 1000))
       println(String(fontName, "UTF-16LE"))
-      while buf.available() != 0 do
-        println(readTLVGroup(buf))
+
+      val listBuffer = ListBuffer[TLVGroup]()
+      val is = DataInputStream(ByteArrayInputStream(buf.readAllBytes()))
+      while is.available() != 0 do listBuffer.addOne(readTLVGroup(is))
+      val texts = List.from(listBuffer).filter(_.tag == 1).map(_.value)
+        .map(e => readTLVGroup(DataInputStream(ByteArrayInputStream(e)))).map(_.value)
+        .map(e => String(e, "UTF-16LE"))
+      println(texts)
   }
 }
