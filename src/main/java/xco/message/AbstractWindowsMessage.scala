@@ -21,4 +21,5 @@ class AbstractWindowsMessage(entity: WindowsMessageTableDO) {
   val fontFamily: Int = is.readUnsignedByte()
   val fontName: String = String(is.readNBytes(is.readLittleEndianUnsignedShort()), "UTF-16LE")
   is.skip(2)
+  val tail: Array[Byte] = is.readAllBytes()
 }
