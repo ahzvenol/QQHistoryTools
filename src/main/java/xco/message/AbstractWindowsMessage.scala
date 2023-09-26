@@ -4,6 +4,8 @@ import xco.entity.WindowsMessageTableDO
 
 import java.io.{ByteArrayInputStream, DataInputStream}
 import xco.util.DataInputStreamExtension.*
+import xco.util.TLVUtil
+import xco.util.TLVUtil.TLV
 
 import java.util.Date
 
@@ -21,5 +23,5 @@ class AbstractWindowsMessage(entity: WindowsMessageTableDO) {
   val fontFamily: Int = is.readUnsignedByte()
   val fontName: String = String(is.readNBytes(is.readLittleEndianUnsignedShort()), "UTF-16LE")
   is.skip(2)
-  val tail: Array[Byte] = is.readAllBytes()
+  val messageChain: List[TLV] = TLVUtil.readTLVList(is.readAllBytes())
 }

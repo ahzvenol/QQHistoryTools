@@ -13,6 +13,8 @@ import xco.handler.WindowsTableNameHandler.WindowsMessageTableQueryInfo
 import xco.mapper.{AndroidMessageMapperWrapper, WindowsMessageMapperWrapper}
 import xco.message.AbstractWindowsMessage
 import xco.util.FPUtil.|>
+import xco.util.TLVUtil
+import xco.util.TLVUtil.TLV
 
 import scala.util.{Try, Using}
 import java.io.*
@@ -58,6 +60,7 @@ class MapperTest() {
       //      //      println(DatatypeConverter.printHexBinary(i.getMsgContent))
       val absMessage = AbstractWindowsMessage(i)
       //      println(absMessage.fontName)
+      println(absMessage.messageChain)
 
       println("------------")
     }

@@ -136,13 +136,13 @@ class BaseTest {
         | (is.readUnsignedByte() << 16)
         | (is.readUnsignedByte() << 24)
 
-    case class TLVGroup(tag: Int, length: Int, value: Array[Byte])
+    case class TLV(tag: Int, length: Int, value: Array[Byte])
 
-    def readTLVGroup(is: DataInputStream): TLVGroup = {
+    def readTLVGroup(is: DataInputStream): TLV = {
       val tag = is.readUnsignedByte()
       val length = is.readLittleEndianUnsignedShort()
       val value = is.readNBytes(length)
-      TLVGroup(tag, length, value)
+      TLV(tag, length, value)
     }
 
     for bytes <- bytesArray do
@@ -161,7 +161,7 @@ class BaseTest {
       println(Date(time * 1000))
       println(String(fontName, "UTF-16LE"))
 
-      val listBuffer = ListBuffer[TLVGroup]()
+      val listBuffer = ListBuffer[TLV]()
       val is = DataInputStream(ByteArrayInputStream(buf.readAllBytes()))
       while is.available() != 0 do listBuffer.addOne(readTLVGroup(is))
       val texts = List.from(listBuffer).filter(_.tag == 1).map(_.value)
