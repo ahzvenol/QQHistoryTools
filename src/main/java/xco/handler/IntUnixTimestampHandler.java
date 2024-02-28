@@ -10,13 +10,12 @@ import java.sql.SQLException;
 import java.util.Date;
 
 @Component
-@MappedTypes({ Date.class })
-@MappedJdbcTypes({ JdbcType.INTEGER })
+@MappedTypes({Date.class})
+@MappedJdbcTypes({JdbcType.INTEGER})
 public class IntUnixTimestampHandler implements TypeHandler<Date> {
 
     @Override
-    public void setParameter(PreparedStatement ps, int i, Date parameter,
-                             JdbcType jdbcType) throws SQLException {
+    public void setParameter(PreparedStatement ps, int i, Date parameter, JdbcType jdbcType) throws SQLException {
         if (parameter == null) {
             if (jdbcType == null) {
                 throw new TypeException(
@@ -55,11 +54,10 @@ public class IntUnixTimestampHandler implements TypeHandler<Date> {
     }
 
     @Override
-    public Date getResult(CallableStatement cs, int columnIndex)
-            throws SQLException {
+    public Date getResult(CallableStatement cs, int columnIndex) throws SQLException {
         int res = cs.getInt(columnIndex);
         long time = res * 1000L;
         return new Date(time);
     }
-    
+
 }

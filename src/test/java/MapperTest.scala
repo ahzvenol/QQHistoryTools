@@ -9,8 +9,8 @@ import org.springframework.test.context.junit4.SpringRunner
 import xco.Application
 import xco.handler.AndroidTableNameHandler
 import xco.handler.AndroidTableNameHandler.AndroidMessageTableQueryInfo
-import xco.handler.WindowsTableNameHandler.WindowsMessageTableQueryInfo
-import xco.mapper.{AndroidMessageMapperWrapper, WindowsMessageMapperWrapper}
+import xco.mapper.AndroidMessageMapperWrapper
+import xco.mapper.WindowsMessageMapper
 import xco.message.AbstractWindowsMessage
 import xco.util.FPUtil.|>
 import xco.util.TLVUtil
@@ -28,8 +28,9 @@ import scala.collection.mutable.ListBuffer
 class MapperTest() {
   @Autowired
   val androidMessageMapper: AndroidMessageMapperWrapper = null
+
   @Autowired
-  val windowsMessageMapper: WindowsMessageMapperWrapper = null
+  val windowsMessageMapper: WindowsMessageMapper = null
 
   @Test
   def androidMessageListTraverse(): Unit = {
@@ -50,16 +51,20 @@ class MapperTest() {
   def windowsMessageListTraverse(): Unit = {
     import scala.collection.convert.ImplicitConversions.`list asScalaBuffer`
     val targetType: "group" | "buddy" = "group"
-    val targetNumber = "904516937"
-    val result = windowsMessageMapper.usingMapper(WindowsMessageTableQueryInfo(targetType, targetNumber))(_.selectList(null))
-    import xco.util.DataInputStreamExtension.*
+    val targetNumber = 904516937
+    val result = windowsMessageMapper.selectList(targetType, targetNumber)
+
     for i <- result.toList do {
       //      println(i.getId)
       //      println(i.getSenderId)
       //      println(i.getTime)
-      //      //      println(DatatypeConverter.printHexBinary(i.getMsgContent))
+      //      println(DatatypeConverter.printHexBinary(i.getMsgContent))
       val absMessage = AbstractWindowsMessage(i)
-      //      println(absMessage.fontName)
+      println(absMessage)
+      println(absMessage.id)
+      println(absMessage.senderId)
+      println(absMessage.fontName)
+      println(absMessage.timeStamp)
       println(absMessage.messageChain)
 
       println("------------")

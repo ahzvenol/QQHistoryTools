@@ -1,6 +1,6 @@
 package xco.handler
 
-import org.apache.ibatis.`type`.{BaseTypeHandler, JdbcType, MappedJdbcTypes, MappedTypes}
+import org.apache.ibatis.`type`.{BaseTypeHandler, ByteArrayTypeHandler, JdbcType, MappedJdbcTypes, MappedTypes}
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import xco.util.AndroidDecryptUtil
@@ -10,7 +10,7 @@ import java.sql.{CallableStatement, PreparedStatement, ResultSet}
 @Component
 @MappedTypes(Array(classOf[Array[Byte]]))
 @MappedJdbcTypes(Array(JdbcType.BLOB, JdbcType.VARCHAR))
-class AndroidDecryptHandler(decryptUtil: AndroidDecryptUtil) extends ByteBlobHandler {
+class AndroidDecryptHandler(decryptUtil: AndroidDecryptUtil) extends ByteArrayTypeHandler {
   override def setNonNullParameter(ps: PreparedStatement, i: Int, t: Array[Byte], jdbcType: JdbcType): Unit = {
     LoggerFactory.getLogger(classOf[AndroidDecryptHandler]).warn("只实现了解密功能")
     super.setNonNullParameter(ps, i, t, jdbcType)

@@ -1,8 +1,8 @@
 package xco.util
 
-import java.io.{ByteArrayInputStream, DataInputStream}
+import java.io.ByteArrayInputStream
 import scala.annotation.tailrec
-import xco.util.DataInputStreamExtension.*
+import xco.util.DataInputStream
 
 import scala.language.implicitConversions
 

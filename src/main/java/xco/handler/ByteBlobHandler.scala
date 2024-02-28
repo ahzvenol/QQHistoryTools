@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component
 
 import java.sql.{CallableStatement, PreparedStatement, ResultSet}
 
+// 默认的ByteArrayTypeHandler有奇怪的问题
 @Component
 @MappedTypes(Array(classOf[Array[Byte]]))
 @MappedJdbcTypes(Array(JdbcType.BLOB))
