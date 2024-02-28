@@ -9,7 +9,7 @@ import xco.util.TLVUtil.{TLV, readTLVList}
 
 import java.util.Date
 
-class AbstractWindowsMessage(entity: WindowsMessageTableDO) {
+class WindowsMessage(entity: WindowsMessageTableDO) {
   val id: Int = entity.getSeq
   val senderId: Int = entity.getSenderUin
   val timeStamp: Date = entity.getTime
