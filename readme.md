@@ -3,15 +3,10 @@ QQ聊天记录工具的后端模块之一,用于本地消息数据库的导出,�
 
 目前只编写并成功运行了一些解析相关的测试函数,后续代码缓慢编写中...
 
-### 关联项目
-#### QQWebUI 
-[https://github.com/ahzvenol/QQWebUI]
+#### 关联项目
+[QQWebUI](https://github.com/ahzvenol/QQWebUI) 对Windows QQ界面的模仿，是导出形式的聊天记录的展示工具
 
-对Windows QQ界面的模仿，是导出形式的聊天记录的展示工具
-#### QQRecordBot
-[[https://github.com/ahzvenol/QQWebUI](https://github.com/ahzvenol/QQRecordBot)]
-
-旧版的记录聊天解决方案，使用第三方QQ机器人记录消息
+[QQRecordBot](https://github.com/ahzvenol/QQWebUI](https://github.com/ahzvenol/QQRecordBot)) 旧版的记录聊天解决方案，使用第三方QQ机器人记录消息
 
 ## 目前已知信息
 ### Android端
